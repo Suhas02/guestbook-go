@@ -28,4 +28,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: Suhas02/guestbook-go:latest
+          tags: suhas4445/guestbook-go:latest
