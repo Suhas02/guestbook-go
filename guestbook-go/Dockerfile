@@ -12,19 +12,59 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-FROM golang:1.10.0
-RUN go get github.com/codegangsta/negroni \
-           github.com/gorilla/mux \
-           github.com/xyproto/simpleredis/v2
+#FROM golang:1.23.0
+#RUN go install github.com/urfave/negroni/ \
+#    go install github.com/gorilla/mux/     \
+#    go install github.com/xyproto/simpleredis/v2/
+#WORKDIR /app
+#COPY go.mod go.sum ./
+#RUN go mod download
+#COPY ..
+#ADD ./main.go .
+#RUN CGO_ENABLED=0 GOOS=linux go build -o main .
+
+#FROM scratch
+#WORKDIR /app
+#COPY --from=0 /app/main .
+#COPY ./public/index.html public/index.html
+#COPY ./public/script.js public/script.js
+#COPY ./public/style.css public/style.css
+#CMD ["/app/main"]
+#EXPOSE 3000
+
+# Use the official Golang image as a build environment
+FROM golang:1.20.0 AS build
+
+# Set the working directory inside the container
 WORKDIR /app
-ADD ./main.go .
+
+# Copy go.mod and go.sum to the container
+COPY go.mod go.sum ./
+
+# Download dependencies
+RUN go mod download
+
+# Copy the source code into the container
+COPY . .
+
+# Build the Go binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
 
+# Start a new stage from scratch for a minimal final image
 FROM scratch
+
+# Set the working directory in the final image
 WORKDIR /app
-COPY --from=0 /app/main .
+
+# Copy the binary and static files from the build stage
+COPY --from=build /app/main .
 COPY ./public/index.html public/index.html
 COPY ./public/script.js public/script.js
 COPY ./public/style.css public/style.css
+
+# Specify the command to run the binary
 CMD ["/app/main"]
+
+# Expose the application port
 EXPOSE 3000
+
