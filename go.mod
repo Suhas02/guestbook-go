@@ -1,4 +1,4 @@
-module example.com
+module Guestbook
 
 go 1.20
 
