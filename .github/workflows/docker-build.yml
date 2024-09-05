@@ -3,9 +3,13 @@ name: Build and Push Docker Image
 on:
   push:
     branches:
-      - master 
       - main # trigger workflow when a PR is merged in main branch
-
+    pull_request:
+    types:
+      - closed
+    branches:
+      - main
+      
 jobs:
   build:
     if: >
