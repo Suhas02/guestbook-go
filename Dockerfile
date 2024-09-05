@@ -33,7 +33,7 @@
 #EXPOSE 3000
 
 # Use the official Golang image as a build environment
-FROM golang:1.20.0 AS build
+FROM golang:1.18 AS build
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -45,7 +45,7 @@ COPY go.mod go.sum ./
 RUN go mod download
 
 # Copy the source code into the container
-COPY . .
+COPY main.go ./
 
 # Build the Go binary
 RUN CGO_ENABLED=0 GOOS=linux go build -o main .
