@@ -1,6 +1,6 @@
 module example.com
 
-go 1.23
+go 1.20
 
 require (
 	github.com/codegangsta/negroni v1.0.0 // indirect
