@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - master
-      - main
+      - main # trigger workflow when a PR is merged in main branch 
 
 jobs:
   build:
